@@ -1,0 +1,88 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      O2;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+InternalO2      0.234;
+
+dimensions      [0 0 0 0 0 0 0];
+
+
+internalField   uniform $InternalO2;
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            zeroGradient;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           uniform 0;
+    }
+    oxidizerInlet
+    {
+        type            fixedValue;
+        value           uniform 0.234;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+
+    master23
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    slave23
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    master345
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    slave345
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    master6897
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    slave6897
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+}
+
+
+// ************************************************************************* //

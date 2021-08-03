@@ -1,0 +1,649 @@
+//Parametrized Engine Curve
+//Run using:
+//m4 -P blockMeshDict.m4.txt > blockMeshDict
+m4_changecom(//)m4_changequote([,])
+m4_define(calc, [m4_esyscmd(perl -e 'use Math::Trig; printf ($1)')])
+m4_define(VCOUNT, 0)
+m4_define(vlabel, [[// ]Vertex $1 = VCOUNT m4_define($1, VCOUNT)m4_define([VCOUNT],m4_incr(VCOUNT))])
+
+//Define pi
+m4_define(pi, 3.1415926536)
+
+//m4 macro input:
+// Input Geometry
+// Given:
+m4_define(ChamberLength, 455)
+m4_define(XLoxInletCenter, 15)
+m4_define(ChamberDiameter, 100)
+m4_define(InjectorRadius, 10)
+m4_define(FuelInletCenterRadius, 15)
+m4_define(ThroatDiameter, 49.8)
+m4_define(ExpansionRatio, 2.25)
+m4_define(LOXInjectorRadius, 2.0)
+m4_define(FuelInjectorRadius, 2.0)
+
+//Measured:
+m4_define(XThroat, 532)
+m4_define(XExit, 581)
+m4_define(InjectorLength, 25)
+
+//Axisymmetrical Wedge Slice Half-Angle(mirrored over the x-z plane)
+m4_define(halfAngle, 0.5)
+
+//For Uniform Grid(could be adapted to dx_avg for use with mesh scaling):
+m4_define(dx, LOXInjectorRadius)
+m4_define(dz, FuelInjectorRadius)
+
+//Calculate Injector Vertices
+m4_define(FuelInletTopRadius, calc(FuelInletCenterRadius + (FuelInjectorRadius / 2)))
+m4_define(FuelInletBotRadius, calc(FuelInletCenterRadius - (FuelInjectorRadius / 2)))
+m4_define(XLoxInletRight, calc(XLoxInletCenter + (LOXInjectorRadius / 2)))
+m4_define(XLoxInletLeft, calc(XLoxInletCenter - (LOXInjectorRadius / 2)))
+
+//Convert Diameter to Radius
+m4_define(ChamberRadius, calc(ChamberDiameter / 2))
+m4_define(ThroatRadius, calc(ThroatDiameter / 2))
+
+//Convert Angle to Radians
+m4_define(radAngle, calc(((90 - halfAngle) * pi) / 180))
+
+//Calculate Exit Radius using Area and Expansion Ratio
+m4_define(ThroatArea, calc(pi * (ThroatRadius * ThroatRadius)))
+m4_define(ExitArea, calc(ThroatArea * ExpansionRatio))
+m4_define(ExitRadius, calc(sqrt(ExitArea / pi)))
+
+//Block 1 Veritces
+m4_define(yInjector, calc(InjectorRadius * cos(radAngle)))
+m4_define(zInjector, calc(InjectorRadius * sin(radAngle)))
+m4_define(yInletBot, calc(FuelInletBotRadius * cos(radAngle)))
+m4_define(zInletBot, calc(FuelInletBotRadius * sin(radAngle)))
+
+//Block 2 Veritces
+m4_define(yInletTop, calc(FuelInletTopRadius * cos(radAngle)))
+m4_define(zInletTop, calc(FuelInletTopRadius * sin(radAngle)))
+
+//Block 4 Vertices
+m4_define(yChamberTop, calc(ChamberRadius * cos(radAngle)))
+m4_define(zChamberTop, calc(ChamberRadius * sin(radAngle)))
+
+//Block 8 Vertices
+m4_define(yThroat, calc(ThroatRadius * cos(radAngle)))
+m4_define(zThroat, calc(ThroatRadius * sin(radAngle)))
+
+//Block 9 Vertices
+m4_define(yExit, calc(ExitRadius * cos(radAngle)))
+m4_define(zExit, calc(ExitRadius * sin(radAngle)))
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//Cell Count - Defined
+//n_z = 1 for all in order to create a "2D" grid
+
+//Inlet Cell Count
+m4_define(n_Inlet, 2)
+
+//Block 1
+m4_define(n_x1, 10)
+m4_define(n_y1, 5)
+
+//Block 4
+m4_define(n_y4, 20)
+
+//Block 5
+m4_define(n_x5, 10)
+m4_define(n_y5, 25)
+
+//Block 6
+m4_define(n_x6, 75)
+
+//Block 8
+m4_define(n_x8, 15)
+
+//Block 7
+m4_define(n_y7, 5)
+
+//Block 9
+m4_define(n_x9, 15)
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//Cell Count - Coupled
+
+//Block 2
+m4_define(n_x2, n_x1)
+m4_define(n_y2, n_Inlet)
+
+//Block 3
+m4_define(n_x3, n_Inlet)
+m4_define(n_y3, n_y1) 
+
+//Block 4
+m4_define(n_x4, n_x1)
+
+//Block 5
+m4_define(n_y5, calc(n_y4 + n_y3))
+
+//Block 6
+m4_define(n_y6, n_y5)
+
+//Block 8
+m4_define(n_y8, n_y6)
+
+//Block 9
+m4_define(n_y9, n_y8)
+
+//Block 7
+m4_define(n_x7, calc(n_x6 + n_x8 + n_x9))
+
+//Round Values to whole number
+//Need to figure out how to do this, for now will input rounding manually.
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//Mesh Grading Ratios for stitched/merged patches
+
+// Chamber Calculations - Blocks 6, 8, and 9 ratios for Block 7 Grading
+m4_define(b7Length, calc(XExit - InjectorLength))
+m4_define(b6Tob7XRatio, calc((ChamberLength - InjectorLength) / b7Length))
+m4_define(b6Tob7CellRatio, calc(n_x6 / n_x7))
+
+m4_define(b8Tob7XRatio, calc((XThroat - ChamberLength) / b7Length))
+m4_define(b8Tob7CellRatio, calc(n_x8 / n_x7))
+
+m4_define(b9Tob7XRatio, calc((XExit - XThroat) / b7Length))
+m4_define(b9Tob7CellRatio, calc(n_x9 / n_x7))
+
+// Injector Calculations - Blocks 3 and 4 ratios for Block 5 Grading
+m4_define(b5Height, calc(ChamberRadius - InjectorRadius))
+m4_define(b3Tob5YRatio, calc((FuelInletTopRadius - InjectorRadius) / b5Height))
+m4_define(b3Tob5CellRatio, calc(n_y3 / n_y5))
+
+m4_define(b4Tob5YRatio, calc((ChamberRadius - FuelInletTopRadius) / b5Height))
+m4_define(b4Tob5CellRatio, calc(n_y4 / n_y5))
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//Mutli-Grading Calculations
+//Block 5 Z-Grading:
+//Inlet Portion
+//m4_define(Block5ZRatioInlet, calc((FuelInletTopRadius / ChamberRadius) * 100))
+//m4_define(Block5CellRatioInlet,	calc((n_z3 / n_z5) * 100))
+//Chamber Edge
+//m4_define(Block5ZRatioEdge, calc((0.2 * (ChamberRadius - FuelInletTopRadius)) * 2))
+//m4_define(Block5CellRatioEdge,	calc(((0.25 * n_z4) / n_z5) * 100))
+//Rest of Block
+//m4_define(Block5ZRatioCenter, calc(100 - Block5ZRatioInlet))
+//m4_define(Block5CellRatioCenter,	calc(100 - Block5CellRatioInlet))
+
+//Block 6 & 7 X-Grading:
+//Inlet Portion
+//m4_define(Block6XRatioInlet, 20)
+//m4_define(Block6CellRatioInlet,	35)
+//Rest of Block
+//m4_define(Block6XRatioCenter, 80)
+//m4_define(Block6CellRatioCenter,	65)
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//Arc intercept calcs
+//m4_define(HalfLength, calc(L1 / 2))
+//m4_define(midZ, calc((0.25* z2) + (0.75* z3)))
+//m4_define(midY, calc((0.25* y2) + (0.75* y3)))
+//m4_define(HalfLength2, calc((L2 * 0.5) + L1))
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+ 
+    root            "";
+    case            "";
+    instance        "";
+    local           "";
+ 
+    class           dictionary;
+    object          blockMeshDict;
+}
+ 
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+scale 0.001;
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//Load Variables calculated from m4 macro script above into the output to 
+//      utilize the variables found below to keep the output neat/readable 
+// Y-Z data for different radial lengths (height of cross-section)
+radialInjector          zInjector;
+FrwedgeInjector         yInjector;
+BkwedgeInjector         -yInjector;
+
+radialBotFuelInlet      zInletBot;
+FrwedgeBotFuelInlet     yInletBot;
+BkwedgeBotFuelInlet     -yInletBot;
+
+radialTopFuelInlet      zInletTop;
+FrwedgeTopFuelInlet     yInletTop;
+BkwedgeTopFuelInlet     -yInletTop;
+
+radialChamberWall       zChamberTop;
+FrwedgeChamberWall      yChamberTop;
+BkwedgeChamberWall      -yChamberTop;
+
+radialThroat            zThroat;
+FrwedgeThroat           yThroat;
+BkwedgeThroat           -yThroat;
+
+radialExit              zExit;
+FrwedgeExit             yExit;
+BkwedgeExit             -yExit;
+
+// X data for different block sections
+lengthLeftLoxInlet      XLoxInletLeft;
+lengthRightLoxInlet     XLoxInletRight;
+lengthStartConverge     ChamberLength;
+lengthInjector          InjectorLength;
+lengthThroat            XThroat;
+lengthTotal             XExit;
+
+vertices
+(
+// Block 1 Vertices
+name b1V0   (0					    $radialInjector		    $FrwedgeInjector)		    // Vertex #0
+name b1V1   ($lengthLeftLoxInlet	$radialInjector         $FrwedgeInjector)		    // Vertex #1
+name b1V2   ($lengthLeftLoxInlet 	$radialInjector		    $BkwedgeInjector)		    // Vertex #2
+name b1V3   (0 					    $radialInjector 		$BkwedgeInjector)		    // Vertex #3
+name b1V4   (0 					    $radialBotFuelInlet 	$FrwedgeBotFuelInlet)		// Vertex #4
+name b1V5   ($lengthLeftLoxInlet 	$radialBotFuelInlet     $FrwedgeBotFuelInlet)		// Vertex #5
+name b1V6   ($lengthLeftLoxInlet	$radialBotFuelInlet	    $BkwedgeBotFuelInlet)		// Vertex #6
+name b1V7   (0 					    $radialBotFuelInlet	    $BkwedgeBotFuelInlet)		// Vertex #7
+
+// Block 2 Vertices
+name b2V0   (0 					    $radialBotFuelInlet 	$FrwedgeBotFuelInlet)		// Vertex #0
+name b2V1   ($lengthLeftLoxInlet 	$radialBotFuelInlet 	$FrwedgeBotFuelInlet)		// Vertex #1
+name b2V2   ($lengthLeftLoxInlet	$radialBotFuelInlet	    $BkwedgeBotFuelInlet)		// Vertex #2
+name b2V3   (0 					    $radialBotFuelInlet	    $BkwedgeBotFuelInlet)		// Vertex #3
+name b2V4   (0 	                    $radialTopFuelInlet 	$FrwedgeTopFuelInlet)		// Vertex #4
+name b2V5   ($lengthRightLoxInlet 	$radialTopFuelInlet 	$FrwedgeTopFuelInlet)		// Vertex #5
+name b2V6   ($lengthRightLoxInlet 	$radialTopFuelInlet 	$BkwedgeTopFuelInlet)		// Vertex #6
+name b2V7   (0 	                    $radialTopFuelInlet 	$BkwedgeTopFuelInlet)		// Vertex #7
+
+//Block 3 Vertices
+name b3V0   ($lengthLeftLoxInlet 	$radialInjector 	    $FrwedgeInjector)		    // Vertex #0
+name b3V1   ($lengthRightLoxInlet 	$radialInjector 	    $FrwedgeInjector)		    // Vertex #1
+name b3V2   ($lengthRightLoxInlet	$radialInjector	        $BkwedgeInjector)		    // Vertex #2
+name b3V3   ($lengthLeftLoxInlet    $radialInjector	        $BkwedgeInjector)		    // Vertex #3
+name b3V4   ($lengthLeftLoxInlet 	$radialBotFuelInlet 	$FrwedgeBotFuelInlet)		// Vertex #4
+name b3V5   ($lengthRightLoxInlet 	$radialTopFuelInlet 	$FrwedgeTopFuelInlet)		// Vertex #5
+name b3V6   ($lengthRightLoxInlet 	$radialTopFuelInlet 	$BkwedgeTopFuelInlet)		// Vertex #6
+name b3V7   ($lengthLeftLoxInlet 	$radialBotFuelInlet 	$BkwedgeBotFuelInlet)		// Vertex #7
+
+//Block 4 Vertices
+name b4V0   (0 	                    $radialTopFuelInlet 	$FrwedgeTopFuelInlet)		// Vertex #0
+name b4V1   ($lengthRightLoxInlet 	$radialTopFuelInlet 	$FrwedgeTopFuelInlet)		// Vertex #1
+name b4V2   ($lengthRightLoxInlet 	$radialTopFuelInlet 	$BkwedgeTopFuelInlet)		// Vertex #2
+name b4V3   (0 	                    $radialTopFuelInlet 	$BkwedgeTopFuelInlet)		// Vertex #3
+name b4V4   (0 	                    $radialChamberWall 	    $FrwedgeChamberWall)		// Vertex #4
+name b4V5   ($lengthRightLoxInlet 	$radialChamberWall 	    $FrwedgeChamberWall)		// Vertex #5
+name b4V6   ($lengthRightLoxInlet 	$radialChamberWall 	    $BkwedgeChamberWall)		// Vertex #6
+name b4V7   (0 	                    $radialChamberWall 	    $BkwedgeChamberWall)		// Vertex #7
+
+//Block 5 Vertices
+name b5V0   ($lengthRightLoxInlet 	$radialInjector 	    $FrwedgeInjector)		    // Vertex #0
+name b5V1   ($lengthInjector 	    $radialInjector 	    $FrwedgeInjector)		    // Vertex #1
+name b5V2   ($lengthInjector 	    $radialInjector 	    $BkwedgeInjector)		    // Vertex #2
+name b5V3   ($lengthRightLoxInlet	$radialInjector	        $BkwedgeInjector)		    // Vertex #3
+name b5V4   ($lengthRightLoxInlet 	$radialChamberWall 	    $FrwedgeChamberWall)		// Vertex #4
+name b5V5   ($lengthInjector	    $radialChamberWall	    $FrwedgeChamberWall)		// Vertex #3
+name b5V6   ($lengthInjector 	    $radialChamberWall 	    $BkwedgeChamberWall)		// Vertex #4
+name b5V7   ($lengthRightLoxInlet 	$radialChamberWall 	    $BkwedgeChamberWall)		// Vertex #7
+
+//Block 6 Vertices
+name b6V0   ($lengthInjector 	    $radialInjector 	    $FrwedgeInjector)		    // Vertex #0
+name b6V1   ($lengthStartConverge 	$radialInjector 	    $FrwedgeInjector)           // Vertex #1
+name b6V2   ($lengthStartConverge 	$radialInjector 	    $BkwedgeInjector)		    // Vertex #2
+name b6V3   ($lengthInjector 	    $radialInjector 	    $BkwedgeInjector)		    // Vertex #3
+name b6V4   ($lengthInjector 	    $radialChamberWall 	    $FrwedgeChamberWall)		// Vertex #4
+name b6V5   ($lengthStartConverge 	$radialChamberWall 	    $FrwedgeChamberWall)		// Vertex #5
+name b6V6   ($lengthStartConverge 	$radialChamberWall 	    $BkwedgeChamberWall)		// Vertex #6
+name b6V7   ($lengthInjector 	    $radialChamberWall 	    $BkwedgeChamberWall)
+
+//Block 7 Vertices
+name b7V0   ($lengthInjector 	    0 	                    0)		                    // Vertex #0
+name b7V1   ($lengthTotal 	        0 	                    0)		           	        // Vertex #3
+
+
+name b7V4   ($lengthInjector 	    $radialInjector 	    $FrwedgeInjector)		    // Vertex #4
+name b7V5   ($lengthTotal 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #5
+name b7V6   ($lengthTotal 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #6
+name b7V7   ($lengthInjector 	    $radialInjector 	    $BkwedgeInjector)           // Vertex #7
+
+//Block 8 Vertices
+name b8V0   ($lengthStartConverge 	$radialInjector 	    $FrwedgeInjector)		    // Vertex #0
+name b8V1   ($lengthThroat 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #1
+name b8V2   ($lengthThroat 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #2
+name b8V3   ($lengthStartConverge 	$radialInjector 	    $BkwedgeInjector)		    // Vertex #3
+name b8V4   ($lengthStartConverge 	$radialChamberWall 	    $FrwedgeChamberWall)		// Vertex #4
+name b8V5   ($lengthThroat 	        $radialThroat 	        $FrwedgeThroat)		        // Vertex #5
+name b8V6   ($lengthThroat 	        $radialThroat 	        $BkwedgeThroat)		        // Vertex #6
+name b8V7   ($lengthStartConverge 	$radialChamberWall 	    $BkwedgeChamberWall)
+
+//Block 9 Vertices
+name b9V0   ($lengthThroat 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #0
+name b9V1   ($lengthTotal 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #1
+name b9V2   ($lengthTotal 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #2
+name b9V3   ($lengthThroat 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #3
+name b9V4   ($lengthThroat 	        $radialThroat 	        $FrwedgeThroat)		        // Vertex #4
+name b9V5   ($lengthTotal 	        $radialExit 	        $FrwedgeExit)		        // Vertex #5
+name b9V6   ($lengthTotal 	        $radialExit 	        $BkwedgeExit)		        // Vertex #6
+name b9V7   ($lengthThroat 	        $radialThroat 	        $BkwedgeThroat)
+
+);
+
+
+blocks
+(
+//Block 1 - Corner between LOx and Fuel Inlet
+hex (b1V0 b1V1 b1V2 b1V3 b1V4 b1V5 b1V6 b1V7)   (n_x1  1 n_y1)    simpleGrading (1 1 1)
+
+//Block 2 - Fuel Inlet
+hex (b2V0 b2V1 b2V2 b2V3 b2V4 b2V5 b2V6 b2V7)   (n_x2  1 n_y2)    simpleGrading (1 1 1)
+
+//Block 3 - LOX Inlet
+hex (b3V0 b3V1 b3V2 b3V3 b3V4 b3V5 b3V6 b3V7)   (n_x3  1 n_y3)    simpleGrading (1 1 1)
+
+//Block 4 - Inlet to Chamber Wall
+hex (b4V0 b4V1 b4V2 b4V3 b4V4 b4V5 b4V6 b4V7)   (n_x4  1 n_y4)  simpleGrading (1 1 1)
+
+//Block 5 - LOX to Injector Wall (right)
+hex (b5V0 b5V1 b5V2 b5V3 b5V4 b5V5 b5V6 b5V7)   (n_x5  1 n_y5)
+    edgeGrading
+	(
+		    1               // x-cell grading
+            1
+            1
+            1
+			1               // z-cell grading
+            1
+            1
+            1
+		(
+			(b3Tob5YRatio b3Tob5CellRatio 1)	// y-cell grading
+			(b4Tob5YRatio b4Tob5CellRatio 1)    //% y-dir, % cells, expansion coeff
+		)
+            1
+            1
+		(
+			(b3Tob5YRatio b3Tob5CellRatio 1)	// y-cell grading
+			(b4Tob5YRatio b4Tob5CellRatio 1)    //% y-dir, % cells, expansion coeff
+		)
+	)
+
+//Block 6 - Middle Main Chamber
+hex (b6V0 b6V1 b6V2 b6V3 b6V4 b6V5 b6V6 b6V7)   (n_x6  1 n_y6)  simpleGrading (1 1 1)
+
+//Block 7 - Centerline to Middle Main Chamber (including Injector tip)
+hex (b7V0 b7V1 b7V1 b7V0 b7V4 b7V5 b7V6 b7V7)   (n_x7  1 n_y7) 
+    simpleGrading
+	(
+		(
+			(b6Tob7XRatio b6Tob7CellRatio 1)	//% x-dir, % cells, expansion coeff
+			(b8Tob7XRatio b8Tob7CellRatio 1)
+			(b9Tob7XRatio b9Tob7CellRatio 1)
+		)
+			1               // z-cell grading
+		    1               // y-cell grading
+	)
+
+//Block 8 - Converging Section: Chamber to Throat
+hex (b8V0 b8V1 b8V2 b8V3 b8V4 b8V5 b8V6 b8V7)   (n_x8  1 n_y8)  simpleGrading (1 1 1)
+
+//Block 9 - Diverging Section: Throat to Exit
+hex (b9V0 b9V1 b9V2 b9V3 b9V4 b9V5 b9V6 b9V7)   (n_x9  1 n_y9)  simpleGrading (1 1 1)
+
+);
+ 
+boundary
+(
+     front
+     { 
+           type wedge;
+           faces  
+           (
+               (b1V0 b1V1 b1V5 b1V4)		//Block 1
+			   (b2V0 b2V1 b2V5 b2V4)		//Block 2
+			   (b3V0 b3V1 b3V5 b3V4)		//Block 3
+			   (b4V0 b4V1 b4V5 b4V4)		//Block 4
+			   (b5V0 b5V1 b5V5 b5V4)		//Block 5
+			   (b6V0 b6V1 b6V5 b6V4)		//Block 6
+			   (b7V0 b7V1 b7V5 b7V4)		//Block 7
+			   (b8V0 b8V1 b8V5 b8V4)		//Block 8
+			   (b9V0 b9V1 b9V5 b9V4)		//Block 9
+           );
+      }
+     back
+     { 
+           type wedge;
+           faces  
+           (
+               (b1V7 b1V6 b1V2 b1V3)		//Block 1
+			   (b2V7 b2V6 b2V2 b2V3)		//Block 2
+			   (b3V7 b3V6 b3V2 b3V3)		//Block 3
+               (b4V7 b4V6 b4V2 b4V3)		//Block 4
+			   (b5V7 b5V6 b5V2 b5V3)		//Block 5
+			   (b6V7 b6V6 b6V2 b6V3)		//Block 6
+			   (b7V7 b7V6 b7V1 b7V0)		//Block 7
+			   (b8V7 b8V6 b8V2 b8V3)		//Block 8
+			   (b9V7 b9V6 b9V2 b9V3)		//Block 9
+           );
+      }
+     walls
+     { 
+           type wall;
+           faces  
+           (
+               (b1V2 b1V1 b1V0 b1V3)		//Block 1 - Injector Base X Plane
+			   (b1V4 b1V7 b1V3 b1V0)		//Block 1 - Injector Base Y Plane
+			   (b4V4 b4V7 b4V3 b4V0)	    //Block 4 - Chamber Wall
+			   (b4V4 b4V5 b4V6 b4V7)	    //Block 4 - Chamber Base
+               (b5V4 b5V5 b5V6 b5V7)	    //Block 5 - Chamber Wall
+			   (b5V2 b5V1 b5V0 b5V3)	    //Block 5 - Injector Tip X Plane
+               (b6V4 b6V5 b6V6 b6V7)	    //Block 6 - Main Chamber Top Wall
+			   (b7V4 b7V7 b7V0 b7V0)	    //Block 7 - Injector Tip Y Plane
+			   (b8V4 b8V5 b8V6 b8V7)	    //Block 8 - Converging Section Outer Wall
+			   (b9V4 b9V5 b9V6 b9V7)	    //Block 9 - Diverging Section Outer Wall
+           );
+      }
+     fuelInlet
+     { 
+           //type patch;
+           type wall;
+           faces  
+           (
+               (b2V4 b2V7 b2V3 b2V0)		//Block 2 - Fuel Inlet
+           );
+      }
+     oxidizerInlet
+     { 
+           //type patch;
+           type wall;
+           faces  
+           (
+			   (b3V2 b3V1 b3V0 b3V3)		//Block 3 - LOX Inlet
+           );
+      }
+    master12
+     { 
+           type patch;
+           faces  
+           (
+               (b2V2 b2V1 b2V0 b2V3)	    //Block 2 - Master Merge Face
+           );
+      }
+    slave12
+     { 
+           type patch;
+           faces  
+           (
+               (b1V4 b1V5 b1V6 b1V7)	    //Block 1 - Slave Merge Face
+           );
+      }
+     master13
+     { 
+           type patch;
+           faces  
+           (
+               (b3V4 b3V7 b3V3 b3V0)	    //Block 3 - Master Merge Face
+           );
+      }
+     slave13
+     { 
+           type patch;
+           faces  
+           (
+               (b1V6 b1V5 b1V1 b1V2)	    //Block 1 - Slave Merge Face
+           );
+      }
+     master23
+     { 
+           type patch;
+           faces  
+           (
+               (b3V4 b3V5 b3V6 b3V7)	    //Block 3 - Master Merge Face
+           );
+      }
+     slave23
+     { 
+           type patch;
+           faces  
+           (
+               (b2V6 b2V5 b2V1 b2V2)	    //Block 2 - Slave Merge Face
+           );
+      }
+     master24
+     { 
+           type patch;
+           faces  
+           (
+               (b2V4 b2V5 b2V6 b2V7)	    //Block 2 - Master Merge Face
+           );
+      }
+     slave24
+     { 
+           type patch;
+           faces  
+           (
+               (b4V2 b4V1 b4V0 b4V3)	    //Block 4 - Slave Merge Face
+           );
+      }
+      master345
+     { 
+           type patch;
+           faces  
+           (
+               (b3V6 b3V5 b3V1 b3V2)	    //Block 3 - Master Merge Face
+               (b4V6 b4V5 b4V1 b4V2)	    //Block 4 - Slave Merge Face
+           );
+      }
+      slave345
+     { 
+           type patch;
+           faces  
+           (
+               (b5V4 b5V7 b5V3 b5V0)	    //Block 5 - Slave Merge Face
+           );
+      }
+      master56
+     { 
+           type patch;
+           faces  
+           (
+               (b6V4 b6V7 b6V3 b6V0)	    //Block 6 - Master Merge Face
+           );
+      }
+      slave56
+     { 
+           type patch;
+           faces  
+           (
+               (b5V6 b5V5 b5V1 b5V2)	    //Block 5 - Slave Merge Face
+           );
+      }
+       master6897
+     { 
+           type patch;
+           faces  
+           (
+               (b6V2 b6V1 b6V0 b6V3)	    //Block 6 - Master Merge Face
+               (b8V2 b8V1 b8V0 b8V3)	    //Block 6 - Master Merge Face
+               (b9V2 b9V1 b9V0 b9V3)	    //Block 6 - Master Merge Face
+           );
+      }
+      slave6897
+     { 
+           type patch;
+           faces  
+           (
+               (b7V4 b7V5 b7V6 b7V7)	    //Block 7 - Slave Merge Face
+           );
+      }
+        master68
+     { 
+           type patch;
+           faces  
+           (
+               (b6V6 b6V5 b6V1 b6V2)	    //Block 6 - Master Merge Face
+           );
+      }
+      slave68
+     { 
+           type patch;
+           faces  
+           (
+               (b8V4 b8V7 b8V3 b8V0)	    //Block 8 - Slave Merge Face
+           );
+      }
+        master89
+     { 
+           type patch;
+           faces  
+           (
+               (b8V6 b8V5 b8V1 b8V2)	    //Block 8 - Master Merge Face
+           );
+      }
+      slave89
+     { 
+           type patch;
+           faces  
+           (
+               (b9V4 b9V7 b9V3 b9V0)	    //Block 9 - Slave Merge Face
+           );
+      }
+     outlet
+     { 
+           type patch;
+           faces  
+           (
+               (b9V6 b9V5 b9V1 b9V2)	//Block 9 - Exit
+               (b7V6 b7V5 b7V1 b7V1)	//Block 7 - Exit
+           );
+      }
+	 axis
+     { 
+           type empty;
+           faces  
+           (
+			   (b7V0 b7V1 b7V1 b7V0)		//Block 7
+           );
+	}
+);
+ 
+mergePatchPairs
+(
+	( slave12   master12 )	    //	merge patch 1 and 2
+	( slave13   master13 )      //  merge patch 1 and 3
+    ( master24  slave24  )      //  merge patch 2 and 4
+    ( master89  slave89  )    //  merge patch 8 and 9
+    ( master56  slave56  )    //  merge patch 5 and 6
+    ( master68  slave68  )  //  merge patch 6 and 8
+    //( slave345  master345  )      //  merge patch 3 and 5
+    //( slave23 master23 )      //  merge patch 2 and 3
+    //( master6897  slave6897  )  //  merge patch 6,8,9 and 7
+);

@@ -1,0 +1,91 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+InternalK       1;
+FuelInletK      1.7992;
+LOXInletK       0.2677;
+
+dimensions      [0 2 -2 0 0 0 0];
+
+
+internalField   uniform $InternalK;
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            kqRWallFunction;
+        value           uniform 1;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           uniform $FuelInletK;
+    }
+    oxidizerInlet
+    {
+        type            fixedValue;
+        value           uniform $LOXInletK;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+
+    master23
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    slave23
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    master345
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    slave345
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    master6897
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    slave6897
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+}
+
+
+// ************************************************************************* //

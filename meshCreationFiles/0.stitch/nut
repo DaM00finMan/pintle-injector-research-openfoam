@@ -1,0 +1,91 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+InternalNuT     0;
+FuelInletNuT    7.3014e-04;
+LOXInletNuT     2.8164e-04;
+
+dimensions      [0 2 -1 0 0 0 0];
+
+
+internalField   uniform $InternalNuT;
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            nutkWallFunction;
+        value           uniform 0;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           uniform $FuelInletNuT;
+    }
+    oxidizerInlet
+    {
+        type            fixedValue;
+        value           uniform $LOXInletNuT;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+
+    master23
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    slave23
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    master345
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    slave345
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    master6897
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    slave6897
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+}
+
+
+// ************************************************************************* //

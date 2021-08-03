@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volVectorField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+//fuelInletVelocity       21.9042;
+//oxidizerInletVelocity   8.4491;
+fuelInletVelocity       100;
+oxidizerInletVelocity   40;
+
+dimensions      [0 1 -1 0 0 0 0];
+
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            noSlip;
+    }
+    fuelInlet
+    {
+        /*
+        type            fixedValue;
+        value           uniform ($fuelInletVelocity 0 0);
+        */
+        type            noSlip;
+    }
+    oxidizerInlet
+    {
+        /*
+        type            fixedValue;
+        value           uniform (0 $oxidizerInletVelocity 0);
+        */
+        type            noSlip;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+    axis
+    {
+        type            empty;
+    }
+}
+
+
+// ************************************************************************* //

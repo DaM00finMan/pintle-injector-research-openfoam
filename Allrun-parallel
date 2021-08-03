@@ -1,0 +1,13 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+./makeMesh
+
+runApplication decomposePar
+
+mpirun -np 4 sprayFoam -parallel > Jan19Run1 &
+
+runApplication reconstructPar
+
+#------------------------------------------------------------------------------

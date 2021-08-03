@@ -1,0 +1,91 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+InternalEpsilon     90;
+FuelInletEpsilon    3620.1;
+LOXInletEpsilon     207.7633;
+
+dimensions      [0 2 -3 0 0 0 0];
+
+
+internalField   uniform $InternalEpsilon;
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            epsilonWallFunction;
+        value           uniform 90;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           uniform $FuelInletEpsilon;
+    }
+    oxidizerInlet
+    {
+        type            fixedValue;
+        value           uniform $LOXInletEpsilon;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+
+    master23
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    slave23
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    master345
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    slave345
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    master6897
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    slave6897
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+}
+
+
+// ************************************************************************* //

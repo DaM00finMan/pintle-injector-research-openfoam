@@ -1,0 +1,14 @@
+!Marinov, N. M, "A Detailed Chemical Kinetic Model for High Temperature Ethanol Oxidation"
+!Int. J. Chem. Kinet. 31:183-220 (1999); 
+!Lawrence Livermore National Laboratory, Livermore, CA, 
+!UCRL-JC-131657
+!UCRL-WEB-204236
+!Review and release date: May 19, 2004.
+!Date: Mon, 26 Apr 1999 15:25:31 -0700 (PDT)
+!From: "Nick M. Marinov" <marinov@west.llnl.gov>
+!
+c2h5oh             2   470.600     4.410     0.000     0.000     1.500 ! nmm
+co                 1    98.100     3.650     0.000     1.950     1.800
+co2                1   244.000     3.763     0.000     2.650     2.100
+o2                 1   107.400     3.458     0.000     1.600     3.800
+h2o                2   572.400     2.605     1.844     0.000     4.000

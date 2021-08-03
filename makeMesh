@@ -1,0 +1,57 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Update blockMeshDict file from m4 file
+m4 -P system/blockMeshDict.m4.txt > system/blockMeshDict
+
+# Copy Boundary Conditions that contain the patches to be stitched
+rm -r 0/
+cp -rf meshCreationFiles/0.stitch 0
+
+# Covert Chemkin Thermo Properties to OpenFOAM format
+runApplication chemkinToFoam chemkin/chem.inp chemkin/therm.dat chemkin/transportProperties constant/reactions constant/speciesThermo
+
+# Make Mesh from blockMeshDict
+runApplication blockMesh 
+
+# Stitch Mesh together
+runApplication stitchMesh -overwrite -perfect master23 slave23
+mv log.stitchMesh log.stitchMesh23
+runApplication stitchMesh -overwrite -perfect master345 slave345
+mv log.stitchMesh log.stitchMesh345
+runApplication stitchMesh -overwrite -perfect master6897 slave6897
+mv log.stitchMesh log.stitchMesh6897
+
+# Force Removal of Fields created by stichMesh
+for i in cellZones faceZones pointZones
+do
+    rm constant/polyMesh/$i
+done
+
+# Change boundary file to remove internal patches left over from stitchMesh
+sed -i '/master/,+5d' constant/polyMesh/boundary
+sed -i '/slave/,+5d' constant/polyMesh/boundary
+sed -i 's/12/6/' constant/polyMesh/boundary
+
+# Copy Boundary Conditions that have internal patches removed
+rm -r 0/
+cp -rf meshCreationFiles/0.noInternal 0
+
+# Collapse Edges to clean up Mesh
+runApplication collapseEdges -overwrite
+
+# Force Removal of Fields created by collapseEdges
+for i in cellZones faceZones pointZones
+do
+    rm constant/polyMesh/$i
+done
+rm 0/pointPriority
+
+# Run Check Mesh to Check Output
+runApplication checkMesh -allTopology -allGeometry
+
+#create ParaView file
+touch pintle.foam

@@ -1,0 +1,91 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      alphat;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+InternalAlpha   0;
+FuelInletAlpha  8.5899e-04;
+LOXInletAlpha   3.3134e-04;
+
+dimensions      [1 -1 -1 0 0 0 0];
+
+
+internalField   uniform $InternalAlpha;
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            compressible::alphatWallFunction;
+        value           uniform 0;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           uniform $FuelInletAlpha;
+    }
+    oxidizerInlet
+    {
+        type            fixedValue;
+        value           uniform $LOXInletAlpha;
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+
+    master23
+    {
+        type            fixedValue;
+        value           uniform $InternalAlpha;
+    }
+    slave23
+    {
+        type            fixedValue;
+        value           uniform $InternalAlpha;
+    }
+    master345
+    {
+        type            fixedValue;
+        value           uniform $InternalAlpha;
+    }
+    slave345
+    {
+        type            fixedValue;
+        value           uniform $InternalAlpha;
+    }
+    master6897
+    {
+        type            fixedValue;
+        value           uniform $InternalAlpha;
+    }
+    slave6897
+    {
+        type            fixedValue;
+        value           uniform $InternalAlpha;
+    }
+}
+
+
+// ************************************************************************* //

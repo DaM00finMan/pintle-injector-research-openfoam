@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2006                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    class       volScalarField;
+    arch        "LSB;label=32;scalar=64";
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+InternalT   800;
+
+dimensions      [0 0 0 1 0 0 0];
+
+
+internalField   uniform $InternalT;
+
+boundaryField
+{
+    front
+    {
+        type            wedge;
+    }
+    back
+    {
+        type            wedge;
+    }
+    walls
+    {
+        type            zeroGradient;
+    }
+    fuelInlet
+    {
+        type            fixedValue;
+        value           uniform 273;
+    }
+    oxidizerInlet
+    {
+        type            fixedValue;
+        value           uniform 273;
+    }
+    outlet
+    {
+        type            totalTemperature;
+        gamma           1.4;
+        T0              uniform 1000;
+    }
+
+
+    master23
+    {
+        type            fixedValue;
+        value           uniform $InternalT;
+    }
+    slave23
+    {
+        type            fixedValue;
+        value           uniform $InternalT;
+    }
+    master345
+    {
+        type            fixedValue;
+        value           uniform $InternalT;
+    }
+    slave345
+    {
+        type            fixedValue;
+        value           uniform $InternalT;
+    }
+    master6897
+    {
+        type            fixedValue;
+        value           uniform $InternalT;
+    }
+    slave6897
+    {
+        type            fixedValue;
+        value           uniform $InternalT;
+    }
+}
+
+
+// ************************************************************************* //

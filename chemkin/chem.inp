@@ -1,0 +1,14 @@
+ELEMENTS
+ H   O    C   N   AR
+END
+SPECIE
+C2H5OH CO CO2 O2 H2O N2
+END
+REACTIONS
+ C2H5OH + 2O2	=> 2CO + 3H2O        	 1.80E+12 0   30000
+	FORD	/ C2H5OH 0.15 /
+	FORD	/ O2 1.6 /
+ CO + 0.5O2    <=>  CO2        			 5.00E+8  0   40000
+	FORD	/ CO	1 /
+	FORD	/ O2 0.25 /
+END

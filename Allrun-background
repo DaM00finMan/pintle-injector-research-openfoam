@@ -1,0 +1,12 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+# Make Mesh from makeMesh shell script (blockMesh,stitchMesh, and collapseEdges
+# blockMesh,stitchMesh, and collapseEdges with file cleanup
+./makeMesh
+
+# Run Solver
+runApplication sprayFoam > log &
+#------------------------------------------------------------------------------
