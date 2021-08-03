@@ -45,12 +45,14 @@ boundaryField
     }
     outlet
     {
-        //type            zeroGradient;
-        type            totalPressure;
-	psi		thermo:psi;
-	gamma		1.4;
-        p0              uniform 5000000;
-        value           uniform 5000000;
+	type		freestream;
+	freestreamValue 101325;      
+	//type            zeroGradient;
+        //type            totalPressure;
+	//psi		thermo:psi;
+	//gamma		1.4;
+        //p0              uniform 5000000;
+        //value           uniform 5000000;
     }
     axis
     {
