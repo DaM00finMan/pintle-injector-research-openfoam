@@ -86,7 +86,8 @@ $ Need to look at BC and setup of case, then will test again. This is most likel
 {8/02/2021} Case Uploaded to GitHub
 Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.git
 
-
-
+#11 {8/02/2021} - [meshCreationFiles/0.noInternal/p], outlet
+	Changed pressure outlet type from totalPressure to freestream with freestreamValue = 101325
+@
 
 
