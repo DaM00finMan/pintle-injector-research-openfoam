@@ -16,41 +16,41 @@ $ Observations
 
 %% case1c_retry branched from case4_ReadyToRun.tar.gz
 $ Unchanged from being unpacked, makes it to 3e-05 w/o lowering timestep
-# 1 - [/meshCreationFiles/0.noInternal/T]
+# 1 - [meshCreationFiles/0.noInternal/T]
 	Change T to 2500 degrees (correcting initial conditions)
 @ Gives Error "Integration Steps greater than maximum 10,000" for ODESolver.C
 
-# 2 - [/constant/chemistryProperties]
+# 2 - [constant/chemistryProperties]
 	Change odeCoeffs.solver from seulex to Rosenbrock34
 @ Runs simulation with correct Temperature IC and makes it to 3e-05 (ClockTime=244s)
 			       ERROR - Integration Steps - 9.25e-05 (ClockTime=1494s)
 
-# 3 - [/constant/spraycloudProperties], subModels.stochasticCollisionModel
+# 3 - [constant/spraycloudProperties], subModels.stochasticCollisionModel
 	Change collision model from trajectory to none in attempt to speed simulation up
 	(particles should burn off early enough)
 @ Runs simulation and makes it to 			      3e-05 (ClockTime=49s)
 				ERROR - Integration Steps - 9.5e-05 (ClockTime=207s)
 
-# 4 - [/constant/chemistyProperties], odeCoeffs.solver
+# 4 - [constant/chemistyProperties], odeCoeffs.solver
 	Change solver and iterate
 @ Euler, EulerSI - ERROR - Integration Steps - 5e-06 (ClockTime=4s)
 @ RKCK45 - No errors even at 2e-04 (ClockTime=447s)
 			   9.5e-05 (ClockTime=192s)
 
-# 5 - [/constant/spraycloudProperties], subModels.particleForces
+# 5 - [constant/spraycloudProperties], subModels.particleForces
 	Comment out SphereDrag - Upon inspection of last run (Change #4), particles burn
 	out to where drag should be negligbile for now at the very least
 @ ERROR - Code gives Floating Point Error from rhoEqn.H:39 before first iteration
 @ Adding SphereDrag back in for the meantime
 
-# 6 - [/meshCreationFiles/0.internal/p], outlet
+# 6 - [meshCreationFiles/0.internal/p], outlet
 	Changed Outlet BC from zeroGradient to totalPressure with
 @ p0/value at 101,325 (Sea Level)-Causes Timestep drops to e-08 by 1e-05
 @ p0/value at 5000000 (Same as internal) - 3e-05 (ClockTime=53s)
 					 9.5e-05 (ClockTime=216s)
 					   2e-04 (ClockTime=475s)
 
-# 7 - [/system/controlDict], deltaT
+# 7 - [system/controlDict], deltaT
 	Changed delta T to 1e-06 to hopefully bypass the integration limit error
 @ Previous result, deltaT=2.5e-06 -> Error at 0.00222 (ClockTime=880s)
 @ Integration step error at 0.001046 (ClockTime=471s)
@@ -58,7 +58,7 @@ $ Unchanged from being unpacked, makes it to 3e-05 w/o lowering timestep
 $ {7/21/2021} While practicing visualization with Paraview, noticed a low pressure zone being moved from the injector to the converging portion before rebounding back to the pintle-injector. Checking outlet BC's:
 	Total pressure was set to subsonic compressible. Adding in psi gives transonic compressible and adding in psi + gamma makes it supersonic compressible.
 
-# 8 {7/21/2021} - [/meshCreationFiles/p], outlet
+# 8 {7/21/2021} - [meshCreationFiles/p], outlet
 	Adding entry for the Supersonic Compressible version of the Total Pressure 		Outlet condition --- psi and gamma as suboptions under type.
 @	No effect on Integration Step Error
 @	
@@ -71,7 +71,7 @@ $ {7/21/2021} While practicing visualization with Paraview, noticed a low pressu
 	Simulation ran for about half the time after deltaT adjustment. Reverting change back to deltaT = 2.5e-06 and shipping case2 with changes #8 + #9.
 	CASE2 SHIPPED
 
-#10 {7/28/2021} - [/system/controlDict], deltaT
+#10 {7/28/2021} - [system/controlDict], deltaT
 	Iterating deltaT to see affect on integration Error
 @	dt = 2.5e-06 -> t = 0.00222
 @	dt = 1.0e-06 -> t = 0.001046
@@ -88,6 +88,12 @@ Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.
 
 #11 {8/02/2021} - [meshCreationFiles/0.noInternal/p], outlet
 	Changed pressure outlet type from totalPressure to freestream with freestreamValue = 101325
-@
+@	Integration Step Error at t = 0.00135182 (Improvement)
+
+{8/03/2021} - Meeting with Popov, suggested change to Chemical Pre-exponential factor:
+
+#12 {8/03/2021} - [chemkin/chem.inp]
+	Changed the first value after the reaction (Pre-Exponential Factor) by reducing it by a factor of 1000 (-3 from exponent)
+@	
 
 
