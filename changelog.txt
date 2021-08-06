@@ -96,4 +96,18 @@ Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.
 	Changed the first value after the reaction (Pre-Exponential Factor) by reducing it by a factor of 1000 (-3 from exponent)
 @	
 
+{8/06/2021} - FERMI Still running case with Change #12! Very good sign!
+	Updated OpenFoamVM to have OpenFOAM-9 in addition to OpenFOAM-8! Working on a github branch for this version to incorporate changes.
+
+#13 {8/06/2021} - Updated files to work with OpenFOAM-9.
+	[constant/sprayCloudProperties] renamed to constant/cloudProperties
+	[constant/cloudProperties] -> added "type	sprayCloud;"
+	[Allrun] -> using reactingFoam solver now
+	[meshCreationFiles/0.noInternal/p], outlet
+		added uniform type before 101325 value for freestream
+$ Incredibly faster simulation! Commiting and Pushing to git with above changes to branch 'of9'
+	t = 0.005076 (ClockTime=138s) 
+	
+
+
 
