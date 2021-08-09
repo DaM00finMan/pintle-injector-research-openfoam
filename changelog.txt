@@ -94,6 +94,10 @@ Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.
 
 #12 {8/03/2021} - [chemkin/chem.inp]
 	Changed the first value after the reaction (Pre-Exponential Factor) by reducing it by a factor of 1000 (-3 from exponent)
-@	
+@	Ran until Simulation time-out (FERMI Run setting). Resultant Case file is 651GB. Cleaning case due to size.
+
+#13 {8/09/2021} - [system/controlDict], 
+	Changing writeInterval from 1e-05 to 1e-03 to reduce case file size.
+@
 
 
