@@ -1,6 +1,6 @@
 // Control Variables for Pintle Injector Mesh
 // Parallel running
-Processors	36;
+Processors	72;
 
 // Time
-EndTime     1.0;
+EndTime     0.5;

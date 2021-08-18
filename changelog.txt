@@ -96,8 +96,14 @@ Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.
 	Changed the first value after the reaction (Pre-Exponential Factor) by reducing it by a factor of 1000 (-3 from exponent)
 @	Ran until Simulation time-out (FERMI Run setting). Resultant Case file is 651GB. Cleaning case due to size.
 
-#13 {8/09/2021} - [system/controlDict], 
+#13 {8/09/2021} - [system/controlDict], writeInterval
 	Changing writeInterval from 1e-05 to 1e-03 to reduce case file size.
+@	Slurm Job Time Limit -> t = 0.148275 (ClockTime=346,197s)
+
+#14 {8/18/2021} - [system/controlDict], writeInterval 
+	Changing writeInterval to 1e-04 to accomodate for the Time period of an acoustic oscillation from Sakaki (1000 Hz)
+		- [batchscriptsmoll144], nodelist
+	Changed nodelist to use 36 processes on 2 cores [44-45] to see if there is a big parallel improvement now.
+		- [meshCreationFiles/controlVariables], Processors, EndTime
+	Changed Processor count to match and edited EndTime to 0.5s
 @
-
-
