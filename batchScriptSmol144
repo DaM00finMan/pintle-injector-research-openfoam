@@ -2,7 +2,7 @@
 #SBATCH --job-name="COLEMANTEST"
 #SBATCH --output="COLEMANTEST.%j.%N.out"
 #SBATCH --partition=week-long-cpu
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 #SBATCH --nodelist=node[44-45]
 #SBATCH --ntasks-per-node=36
 #SBATCH --export=ALL
