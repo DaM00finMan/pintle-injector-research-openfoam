@@ -106,4 +106,20 @@ Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.
 	Changed nodelist to use 36 processes on 2 cores [44-45] to see if there is a big parallel improvement now.
 		- [meshCreationFiles/controlVariables], Processors, EndTime
 	Changed Processor count to match and edited EndTime to 0.5s
-@
+@	Slurm Job Time Limit -> t = 0.180663 (ClockTime=346,217s)
+
+{9/03/2021} Preliminary Results presented in Thesis Proposal Presentation
+
+$ Investigating models and conditions used
+
+#15 {9/07/2021} - [system/fvSchemes]
+	Change divSchemes from gauss upwind to gauss linear for higher order interpolation. 	divSchemes changed: div(phi,U), div(phid,p), div(phi,k), div(phi,epsilon).
+	Change divSchemes.div(phi,Yi_h) to MUSCL for 2nd order unbounded schemed (No Linear)
+	Change ddtSchemes default from Euler to backward.
+		- [meshCreationFiles/0.noInternal/p], boundaryField.outlet
+	Add uniform label to value that was left out previously (No affect to solution).
+		- [constant/sprayCloudProperties], parcelsPerSecond
+	Reduced value for both fuel and oxidizer by factor of 10 to increase compute speed.
+@ 	Simulation runs. Full run not performed.
+
+	
