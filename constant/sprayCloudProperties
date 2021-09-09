@@ -92,7 +92,7 @@ subModels
             duration        1;
             position        (1.0e-06 15e-03 0); //(OffsetFromWall, InjectorCenterHeight)
             direction       (1 0 0);
-            parcelsPerSecond 600000000;
+            parcelsPerSecond 60000000;
             flowRateProfile constant 1;
             
             //Cd              constant 0.9;
@@ -129,7 +129,7 @@ subModels
             duration        1;
             position        (15e-03 10001e-06 0); //(OffsetFromWall, InjectorCenterHeight)
             direction       (0 1 0);
-            parcelsPerSecond 291670000;
+            parcelsPerSecond 29167000;
             flowRateProfile constant 1;
 
             //Cd              constant 0.9;

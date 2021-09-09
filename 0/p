@@ -46,7 +46,7 @@ boundaryField
     outlet
     {
 	type		freestream;
-	freestreamValue 101325;      
+	freestreamValue uniform 101325;      
 	//type            zeroGradient;
         //type            totalPressure;
 	//psi		thermo:psi;

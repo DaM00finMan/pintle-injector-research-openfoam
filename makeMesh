@@ -50,6 +50,9 @@ do
 done
 rm 0/pointPriority
 
+# Set ignition cell zone with topoSet
+runApplication topoSet
+
 # Run Check Mesh to Check Output
 runApplication checkMesh -allTopology -allGeometry
 

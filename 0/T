@@ -19,7 +19,7 @@ FoamFile
 dimensions      [0 0 0 1 0 0 0];
 
 
-internalField   uniform 2500;
+internalField   uniform 600;
 
 boundaryField
 {
@@ -55,8 +55,8 @@ boundaryField
     {
         type            totalTemperature;
         gamma           1.4;
-        T0              uniform 2500;
-        value           uniform 2500;
+        T0              uniform 1250;
+        value           uniform 1250;
     }
     axis
     {
