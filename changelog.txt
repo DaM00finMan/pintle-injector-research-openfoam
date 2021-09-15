@@ -121,5 +121,11 @@ $ Investigating models and conditions used
 		- [constant/sprayCloudProperties], parcelsPerSecond
 	Reduced value for both fuel and oxidizer by factor of 10 to increase compute speed.
 @ 	Simulation runs. Full run not performed.
+	Simulation reached endTime of 0.1 s (ClockTime=106,000 s)
+	
+{9/15/2021} - Creating particleTest branch to test previously used differential schemes with lower particle count. This is to see if the combustion error was independednt of particle count or not.
+
+#16 {9/15/2021} - BRANCH: particleTest [system/fvSchemes]
+	Reverted change to file made in #15.
 
 	
