@@ -121,11 +121,27 @@ $ Investigating models and conditions used
 		- [constant/sprayCloudProperties], parcelsPerSecond
 	Reduced value for both fuel and oxidizer by factor of 10 to increase compute speed.
 @ 	Simulation runs. Full run not performed.
-	Simulation reached endTime of 0.1 s (ClockTime=106,000 s)
+	Simulation reached endTime of 0.1 s (ClockTime=106,000 s) ~x3 speed increase from particle count drop
 	
 {9/15/2021} - Creating particleTest branch to test previously used differential schemes with lower particle count. This is to see if the combustion error was independednt of particle count or not.
 
 #16 {9/15/2021} - BRANCH: particleTest [system/fvSchemes]
-	Reverted change to file made in #15.
+	Reverted change to file made in #15. To test for combustion with 1st order schemes.
+@	Simulation completed on FERMI over the weekend after maintanence. Simulation progressed to coded end time of t = 0.1s (ClockTime=15,538s)
+	~x10 speed increase from 2nd order schemes
 
-	
+#18 {9/22/2021} - BRANCH: particleTest [meshCreationFiles/0.noInternal/] p, T
+	Adjusting boundary conditions.
+	Pressure: Outlet condition changed to total pressure condition to create a nozzle pressure outflow condition.
+		Supersonic Compressible condition by setting psi, gamma, p0, and value, p0 = 0.5295 MPa at the outlet.
+		Gamma changed to calculated value of 1.192.
+		Internal Pressure Field corrected to 0.5 MPa = 500000 Pa.
+	Temperature: Gamma changed to calculated value of 1.192 for O/F mixture.
+
+{9/22/2021} - Creating branch TempCondition to test for the change to the Total Temp Outlet Condition at the same time as change #18
+
+#19 {9/22/2021} - BRANCH: tempCondition [meshCreationFiles/0.noInternal/T.outlet]
+		Outlet condition adjusted to calculated T0 value T0 = 185.27 K, NOT CONFIDENT in this value.
+		To account for chemical reactions including data for 300-5000K only. The value used is 300K for T0.
+		Change performed in a seperate branch to conduct a parallel test.
+

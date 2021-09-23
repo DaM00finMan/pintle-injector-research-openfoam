@@ -54,9 +54,9 @@ boundaryField
     outlet
     {
         type            totalTemperature;
-        gamma           1.4;
-        T0              uniform 2500;
-        value           uniform 2500;
+        gamma           1.192;
+        T0              uniform 300;
+        value           uniform 300;
     }
     axis
     {
