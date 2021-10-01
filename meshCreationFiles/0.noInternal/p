@@ -47,14 +47,14 @@ boundaryField
     {
 	//type		freestream;
 	//freestreamValue uniform 101325;  
-	//type 		fixedValue;
-	//value 		uniform 53900;    
+	type 		fixedValue;
+	value 		uniform 53903;    
 	//type            zeroGradient;
-        type            totalPressure;
-	psi		thermo:psi;
-	gamma		1.192;
-        p0              uniform 529500;
-        value           uniform 529500;
+        //type            totalPressure;
+	//psi		thermo:psi;
+	//gamma		1.192;
+        //p0              uniform 529500;
+        //value           uniform 529500;
     }
     axis
     {

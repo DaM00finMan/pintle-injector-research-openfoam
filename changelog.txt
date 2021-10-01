@@ -141,7 +141,14 @@ $ Investigating models and conditions used
 {9/22/2021} - Creating branch TempCondition to test for the change to the Total Temp Outlet Condition at the same time as change #18
 
 #19 {9/22/2021} - BRANCH: tempCondition [meshCreationFiles/0.noInternal/T.outlet]
-		Outlet condition adjusted to calculated T0 value T0 = 185.27 K, NOT CONFIDENT in this value.
-		To account for chemical reactions including data for 300-5000K only. The value used is 300K for T0.
-		Change performed in a seperate branch to conduct a parallel test.
+	Outlet condition adjusted to calculated T0 value T0 = 185.27 K, NOT CONFIDENT in this value.
+	To account for chemical reactions including data for 300-5000K only. The value used is 300K for T0.
+	Change performed in a seperate branch to conduct a parallel test.
+@	Acoustic waves forming in mid-chamber region. Bad solution for lowTemp BC.
+
+#20 {10/01/2021} - BRANCH: particleTest [meshCreationFiles/0.noInternal/p]
+	Pressure of combustion listed by Sakaki taken to be chamber (internalField) static pressure.
+	p.internalField = 500000 Pa
+	p.outlet.staticPressure = 53903 Pa
+	Confirming total Temperature is set to T0 = 2500 K until a more accurate value is calculated.
 
