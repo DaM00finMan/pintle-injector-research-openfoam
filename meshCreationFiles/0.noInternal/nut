@@ -36,23 +36,14 @@ boundaryField
         type            nutkWallFunction;
         value           uniform 0;
     }
-    fuelInlet
+    inlet
     {
+
+        type            zeroGradient;
         /*
-        type            fixedValue;
-        value           uniform 0.00073014;
-        */
         type            nutkWallFunction;
         value           uniform 0;
-    }
-    oxidizerInlet
-    {
-        /*
-        type            fixedValue;
-        value           uniform 0.00028164;
         */
-        type            nutkWallFunction;
-        value           uniform 0;
     }
     outlet
     {

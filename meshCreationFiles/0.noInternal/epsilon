@@ -36,23 +36,16 @@ boundaryField
         type            epsilonWallFunction;
         value           uniform 90;
     }
-    fuelInlet
+    inlet
     {
+
+      //  type            fixedValue;
+      //  value           uniform 90;
+        type            zeroGradient;
         /*
-        type            fixedValue;
-        value           uniform 3620.1;
-        */
         type            epsilonWallFunction;
         value           uniform 90;
-    }
-    oxidizerInlet
-    {
-        /*
-        type            fixedValue;
-        value           uniform 207.7633;
         */
-        type            epsilonWallFunction;
-        value           uniform 90;
     }
     outlet
     {

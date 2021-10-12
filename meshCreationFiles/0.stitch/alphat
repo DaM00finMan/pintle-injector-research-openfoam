@@ -39,15 +39,10 @@ boundaryField
         type            compressible::alphatWallFunction;
         value           uniform 0;
     }
-    fuelInlet
+    inlet
     {
         type            fixedValue;
         value           uniform $FuelInletAlpha;
-    }
-    oxidizerInlet
-    {
-        type            fixedValue;
-        value           uniform $LOXInletAlpha;
     }
     outlet
     {

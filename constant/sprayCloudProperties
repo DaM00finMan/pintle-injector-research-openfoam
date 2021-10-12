@@ -17,8 +17,8 @@ FoamFile
 
 solution
 {
-    active          true;
-    coupled         true;
+    active          false;
+    coupled         false;
     transient       yes;
     cellValueSourceCorrection on;
     maxCo           0.3;
@@ -53,7 +53,7 @@ solution
     }
 }
 
-
+/*
 constantProperties
 {
     T0              320;
@@ -94,7 +94,7 @@ subModels
             direction       (1 0 0);
             parcelsPerSecond 60000000;
             flowRateProfile constant 1;
-            
+
             //Cd              constant 0.9;
 
             thetaInner      constant 0.0;
@@ -218,6 +218,7 @@ subModels
         Cs              10;
     }
 
+*/
 /*
     ReitzKHRTCoeffs
     {
@@ -230,6 +231,7 @@ subModels
         WeberLimit      6;
     }
 */
+/*
     TABCoeffs
     {
         y0              0;
@@ -243,6 +245,6 @@ subModels
 
 cloudFunctions
 {}
-
+*/
 
 // ************************************************************************* //

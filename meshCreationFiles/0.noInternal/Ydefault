@@ -35,21 +35,14 @@ boundaryField
     {
         type            zeroGradient;
     }
-    fuelInlet
+    inlet
     {
         /*
         type            fixedValue;
         value           uniform 0;
         */
         type            zeroGradient;
-    }
-    oxidizerInlet
-    {
-        /*
-        type            fixedValue;
-        value           uniform 0;
-        */
-        type            zeroGradient;
+        
     }
     outlet
     {

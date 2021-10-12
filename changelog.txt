@@ -151,4 +151,7 @@ $ Investigating models and conditions used
 	p.internalField = 500000 Pa
 	p.outlet.staticPressure = 53903 Pa
 	Confirming total Temperature is set to T0 = 2500 K until a more accurate value is calculated.
+	
+{10/10/2021} - Creating branch nozzleOnly in order to test the geometry of the nozzle only for purposes of figuring out the results.
+	BlockMesh and many other files adjusted to make this work and won't be cataloged.
 

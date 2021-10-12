@@ -39,15 +39,10 @@ boundaryField
         type            kqRWallFunction;
         value           uniform 1;
     }
-    fuelInlet
+    inlet
     {
         type            fixedValue;
         value           uniform $FuelInletK;
-    }
-    oxidizerInlet
-    {
-        type            fixedValue;
-        value           uniform $LOXInletK;
     }
     outlet
     {

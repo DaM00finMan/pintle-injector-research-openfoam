@@ -17,13 +17,13 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 //fuelInletVelocity       21.9042;
 //oxidizerInletVelocity   8.4491;
-fuelInletVelocity       100;
-oxidizerInletVelocity   40;
+fuelInletVelocity       713;
+//oxidizerInletVelocity   40;
 
 dimensions      [0 1 -1 0 0 0 0];
 
 
-internalField   uniform (0 0 0);
+internalField   uniform (713 0 0);
 
 boundaryField
 {
@@ -39,21 +39,13 @@ boundaryField
     {
         type            noSlip;
     }
-    fuelInlet
+    inlet
     {
-        /*
+
         type            fixedValue;
         value           uniform ($fuelInletVelocity 0 0);
-        */
-        type            noSlip;
-    }
-    oxidizerInlet
-    {
-        /*
-        type            fixedValue;
-        value           uniform (0 $oxidizerInletVelocity 0);
-        */
-        type            noSlip;
+
+        //type            zeroGradient;
     }
     outlet
     {
