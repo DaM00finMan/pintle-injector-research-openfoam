@@ -3,7 +3,7 @@
 Starting with Case1c_retry, based off of the import of the last working
 and tested case directory from the FERMI server, case4_ReadyToRun.tar.gz.
 The changelog was started on 7/01/2021 in order to keep track of changes
-and the results of the changes to the program to try to narrow down and 
+and the results of the changes to the program to try to narrow down and
 track the possible cause of the problem with the simulation
 
 Key for ChangeLog:
@@ -61,7 +61,7 @@ $ {7/21/2021} While practicing visualization with Paraview, noticed a low pressu
 # 8 {7/21/2021} - [meshCreationFiles/p], outlet
 	Adding entry for the Supersonic Compressible version of the Total Pressure 		Outlet condition --- psi and gamma as suboptions under type.
 @	No effect on Integration Step Error
-@	
+@
 
 # 9 {7/21/2021} - New Script, Fix Recontruct
 	Added script Follow.sh which executes "tail -f log.sprayfoam" for less typing
@@ -100,7 +100,7 @@ Repository at: https://github.com/DaM00finMan/pintle-injector-research-openfoam.
 	Changing writeInterval from 1e-05 to 1e-03 to reduce case file size.
 @	Slurm Job Time Limit -> t = 0.148275 (ClockTime=346,197s)
 
-#14 {8/18/2021} - [system/controlDict], writeInterval 
+#14 {8/18/2021} - [system/controlDict], writeInterval
 	Changing writeInterval to 1e-04 to accomodate for the Time period of an acoustic oscillation from Sakaki (1000 Hz)
 		- [batchscriptsmoll144], nodelist
 	Changed nodelist to use 36 processes on 2 cores [44-45] to see if there is a big parallel improvement now.
@@ -122,7 +122,7 @@ $ Investigating models and conditions used
 	Reduced value for both fuel and oxidizer by factor of 10 to increase compute speed.
 @ 	Simulation runs. Full run not performed.
 	Simulation reached endTime of 0.1 s (ClockTime=106,000 s) ~x3 speed increase from particle count drop
-	
+
 {9/15/2021} - Creating particleTest branch to test previously used differential schemes with lower particle count. This is to see if the combustion error was independednt of particle count or not.
 
 #16 {9/15/2021} - BRANCH: particleTest [system/fvSchemes]
@@ -151,4 +151,12 @@ $ Investigating models and conditions used
 	p.internalField = 500000 Pa
 	p.outlet.staticPressure = 53903 Pa
 	Confirming total Temperature is set to T0 = 2500 K until a more accurate value is calculated.
+@	Solution time step decreases to machine 0, or weird backflow present in nozzle
 
+#21 {10/13/2021} - BRANCH: particleTest [meshCreationFiles/0.noInternal/p]
+	Changing chamber pressure to outlet value for initial condition to have the
+	resultant acoustic pressure wave to form at injector and propogate downstream
+	rather than from the outlet upstream.
+	p.internalField = 53901
+	Working on creating a variable internalField for initial conditions from
+	isentropic nozzle calculations.
