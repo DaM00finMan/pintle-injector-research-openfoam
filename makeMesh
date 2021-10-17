@@ -34,21 +34,21 @@ done
 # Change boundary file to remove internal patches left over from stitchMesh
 sed -i '/master/,+5d' constant/polyMesh/boundary
 sed -i '/slave/,+5d' constant/polyMesh/boundary
-sed -i 's/12/6/' constant/polyMesh/boundary
+sed -i 's/\<12\>/6/' constant/polyMesh/boundary
 
 # Copy Boundary Conditions that have internal patches removed
 rm -r 0/
 cp -rf meshCreationFiles/0.noInternal 0
 
 # Collapse Edges to clean up Mesh
-runApplication collapseEdges -overwrite
+#runApplication collapseEdges -overwrite
 
 # Force Removal of Fields created by collapseEdges
-for i in cellZones faceZones pointZones
-do
-    rm constant/polyMesh/$i
-done
-rm 0/pointPriority
+#for i in cellZones faceZones pointZones
+#do
+#    rm constant/polyMesh/$i
+#done
+#rm 0/pointPriority
 
 # Run Check Mesh to Check Output
 runApplication checkMesh -allTopology -allGeometry

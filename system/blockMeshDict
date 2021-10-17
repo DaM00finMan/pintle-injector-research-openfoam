@@ -307,12 +307,12 @@ name b6V7   ($lengthInjector 	    $radialChamberWall 	    $BkwedgeChamberWall)
 
 //Block 7 Vertices
 name b7V0   ($lengthInjector 	    0 	                    0)		                    // Vertex #0
-name b7V1   ($lengthTotal 	        0 	                    0)		           	        // Vertex #3
+name b7V1   ($lengthThroat 	        0 	                    0)		           	        // Vertex #3
 
 
 name b7V4   ($lengthInjector 	    $radialInjector 	    $FrwedgeInjector)		    // Vertex #4
-name b7V5   ($lengthTotal 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #5
-name b7V6   ($lengthTotal 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #6
+name b7V5   ($lengthThroat 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #5
+name b7V6   ($lengthThroat 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #6
 name b7V7   ($lengthInjector 	    $radialInjector 	    $BkwedgeInjector)           // Vertex #7
 
 //Block 8 Vertices
@@ -326,14 +326,14 @@ name b8V6   ($lengthThroat 	        $radialThroat 	        $BkwedgeThroat)		    
 name b8V7   ($lengthStartConverge 	$radialChamberWall 	    $BkwedgeChamberWall)
 
 //Block 9 Vertices
-name b9V0   ($lengthThroat 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #0
-name b9V1   ($lengthTotal 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #1
-name b9V2   ($lengthTotal 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #2
-name b9V3   ($lengthThroat 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #3
-name b9V4   ($lengthThroat 	        $radialThroat 	        $FrwedgeThroat)		        // Vertex #4
-name b9V5   ($lengthTotal 	        $radialExit 	        $FrwedgeExit)		        // Vertex #5
-name b9V6   ($lengthTotal 	        $radialExit 	        $BkwedgeExit)		        // Vertex #6
-name b9V7   ($lengthThroat 	        $radialThroat 	        $BkwedgeThroat)
+//name b9V0   ($lengthThroat 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #0
+//name b9V1   ($lengthTotal 	        $radialInjector 	    $FrwedgeInjector)		    // Vertex #1
+//name b9V2   ($lengthTotal 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #2
+//name b9V3   ($lengthThroat 	        $radialInjector 	    $BkwedgeInjector)		    // Vertex #3
+//name b9V4   ($lengthThroat 	        $radialThroat 	        $FrwedgeThroat)		        // Vertex #4
+//name b9V5   ($lengthTotal 	        $radialExit 	        $FrwedgeExit)		        // Vertex #5
+//name b9V6   ($lengthTotal 	        $radialExit 	        $BkwedgeExit)		        // Vertex #6
+//name b9V7   ($lengthThroat 	        $radialThroat 	        $BkwedgeThroat)
 
 );
 
@@ -380,13 +380,13 @@ hex (b5V0 b5V1 b5V2 b5V3 b5V4 b5V5 b5V6 b5V7)   (10  1 25)
 hex (b6V0 b6V1 b6V2 b6V3 b6V4 b6V5 b6V6 b6V7)   (75  1 25)  simpleGrading (1 1 1)
 
 //Block 7 - Centerline to Middle Main Chamber (including Injector tip)
-hex (b7V0 b7V1 b7V1 b7V0 b7V4 b7V5 b7V6 b7V7)   (105  1 5) 
+hex (b7V0 b7V1 b7V1 b7V0 b7V4 b7V5 b7V6 b7V7)   (90  1 5) 
     simpleGrading
 	(
 		(
-			(0.773381294964029 0.714285714285714 1)	//% x-dir, % cells, expansion coeff
-			(0.138489208633094 0.142857142857143 1)
-			(0.0881294964028777 0.142857142857143 1)
+			(0.848126232741617 0.833333333333333 1)	//% x-dir, % cells, expansion coeff
+			(0.151873767258383 0.166666666666667 1)
+			//(b9Tob7XRatio b9Tob7CellRatio 1)
 		)
 			1               // z-cell grading
 		    1               // y-cell grading
@@ -396,7 +396,7 @@ hex (b7V0 b7V1 b7V1 b7V0 b7V4 b7V5 b7V6 b7V7)   (105  1 5)
 hex (b8V0 b8V1 b8V2 b8V3 b8V4 b8V5 b8V6 b8V7)   (15  1 25)  simpleGrading (1 1 1)
 
 //Block 9 - Diverging Section: Throat to Exit
-hex (b9V0 b9V1 b9V2 b9V3 b9V4 b9V5 b9V6 b9V7)   (15  1 25)  simpleGrading (1 1 1)
+//hex (b9V0 b9V1 b9V2 b9V3 b9V4 b9V5 b9V6 b9V7)   (n_x9  1 n_y9)  simpleGrading (1 1 1)
 
 );
  
@@ -415,7 +415,7 @@ boundary
 			   (b6V0 b6V1 b6V5 b6V4)		//Block 6
 			   (b7V0 b7V1 b7V5 b7V4)		//Block 7
 			   (b8V0 b8V1 b8V5 b8V4)		//Block 8
-			   (b9V0 b9V1 b9V5 b9V4)		//Block 9
+			   //(b9V0 b9V1 b9V5 b9V4)		//Block 9
            );
       }
      back
@@ -431,7 +431,7 @@ boundary
 			   (b6V7 b6V6 b6V2 b6V3)		//Block 6
 			   (b7V7 b7V6 b7V1 b7V0)		//Block 7
 			   (b8V7 b8V6 b8V2 b8V3)		//Block 8
-			   (b9V7 b9V6 b9V2 b9V3)		//Block 9
+			   //(b9V7 b9V6 b9V2 b9V3)		//Block 9
            );
       }
      walls
@@ -448,7 +448,7 @@ boundary
                (b6V4 b6V5 b6V6 b6V7)	    //Block 6 - Main Chamber Top Wall
 			   (b7V4 b7V7 b7V0 b7V0)	    //Block 7 - Injector Tip Y Plane
 			   (b8V4 b8V5 b8V6 b8V7)	    //Block 8 - Converging Section Outer Wall
-			   (b9V4 b9V5 b9V6 b9V7)	    //Block 9 - Diverging Section Outer Wall
+			   //(b9V4 b9V5 b9V6 b9V7)	    //Block 9 - Diverging Section Outer Wall
            );
       }
      fuelInlet
@@ -573,7 +573,7 @@ boundary
            (
                (b6V2 b6V1 b6V0 b6V3)	    //Block 6 - Master Merge Face
                (b8V2 b8V1 b8V0 b8V3)	    //Block 6 - Master Merge Face
-               (b9V2 b9V1 b9V0 b9V3)	    //Block 6 - Master Merge Face
+               //(b9V2 b9V1 b9V0 b9V3)	    //Block 6 - Master Merge Face
            );
       }
       slave6897
@@ -600,6 +600,7 @@ boundary
                (b8V4 b8V7 b8V3 b8V0)	    //Block 8 - Slave Merge Face
            );
       }
+      /*
         master89
      { 
            type patch;
@@ -616,12 +617,14 @@ boundary
                (b9V4 b9V7 b9V3 b9V0)	    //Block 9 - Slave Merge Face
            );
       }
+      */
      outlet
      { 
            type patch;
            faces  
            (
-               (b9V6 b9V5 b9V1 b9V2)	//Block 9 - Exit
+               //(b9V6 b9V5 b9V1 b9V2)	//Block 9 - Exit
+               (b8V6 b8V5 b8V1 b8V2)	//Block 8 - New Exit at Throat
                (b7V6 b7V5 b7V1 b7V1)	//Block 7 - Exit
            );
       }
@@ -640,7 +643,7 @@ mergePatchPairs
 	( slave12   master12 )	    //	merge patch 1 and 2
 	( slave13   master13 )      //  merge patch 1 and 3
     ( master24  slave24  )      //  merge patch 2 and 4
-    ( master89  slave89  )    //  merge patch 8 and 9
+    //( master89  slave89  )    //  merge patch 8 and 9
     ( master56  slave56  )    //  merge patch 5 and 6
     ( master68  slave68  )  //  merge patch 6 and 8
     //( slave345  master345  )      //  merge patch 3 and 5

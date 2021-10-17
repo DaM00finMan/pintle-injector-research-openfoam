@@ -19,7 +19,7 @@ FoamFile
 dimensions      [1 -1 -2 0 0 0 0];
 
 
-internalField   uniform 500000;
+internalField   uniform 299697;
 
 boundaryField
 {
@@ -46,15 +46,15 @@ boundaryField
     outlet
     {
 	//type		freestream;
-	//freestreamValue uniform 101325;  
-	//type 		fixedValue;
-	//value 		uniform 53900;    
+	//freestreamValue uniform 53903;
+	type 		fixedValue;
+	value 		uniform 299697;
 	//type            zeroGradient;
-        type            totalPressure;
-	psi		thermo:psi;
-	gamma		1.192;
-        p0              uniform 529500;
-        value           uniform 529500;
+        //type            totalPressure;
+	//psi		thermo:psi;
+	//gamma		1.192;
+        //p0              uniform 529500;
+        //value           uniform 529500;
     }
     axis
     {
