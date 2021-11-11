@@ -47,9 +47,10 @@ boundaryField
     {
         /*
         type            fixedValue;
-        value           uniform 0.234;
+        value           uniform 1.0; // Set Lox Patch to 1.0
         */
         type            zeroGradient;
+        //
     }
     outlet
     {

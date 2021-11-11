@@ -53,6 +53,7 @@ boundaryField
         */
         type            epsilonWallFunction;
         value           uniform 90;
+        //
     }
     outlet
     {

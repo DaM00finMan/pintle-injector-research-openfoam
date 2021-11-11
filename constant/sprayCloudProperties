@@ -14,7 +14,6 @@ FoamFile
     object      SprayCloudProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-
 solution
 {
     active          true;
@@ -56,7 +55,7 @@ solution
 
 constantProperties
 {
-    T0              320;
+    T0              400;
 
     // place holders for rho0 and Cp0
     // - reset from liquid properties using T0
@@ -79,63 +78,29 @@ subModels
     {
         fuel    //Fuel Inlet Injection
         {
-            type            coneInjection;
+            //type            coneInjection;
+            type            patchInjection;
+            patchName       fuelInlet;
+            U0              (206 0 0);
             SOI             0;
-            massTotal       6.0e-06;           //Total Mass (flowrate x duration)
+            massTotal       6.67e-04;           //Total Mass (flowrate x duration)
             parcelBasisType mass;
             injectionMethod disc;
             //flowType        flowRateAndDischarge;
-            flowType        constantVelocity;
-            Umag            21.9042;
-            dInner          0;
-            dOuter          2.0e-05;            //Currently set to 10% of current injector diameter
+            //flowType        constantVelocity;
+            //Umag            206;
+            //dInner          0;
+            //dOuter          2.0e-04;            //Currently set to 10% of current injector diameter
             duration        1;
-            position        (1.0e-06 15e-03 0); //(OffsetFromWall, InjectorCenterHeight)
+            //position        (1.0e-06 15e-03 0); //(OffsetFromWall, InjectorCenterHeight)
             direction       (1 0 0);
-            parcelsPerSecond 60000000;
-            flowRateProfile constant 1;
+            parcelsPerSecond 6e06;
+            flowRateProfile constant 6.67e-04;
             
-            //Cd              constant 0.9;
+            //Cd              constant 1.0;
 
-            thetaInner      constant 0.0;
-            thetaOuter      constant 5.0;
-
-            sizeDistribution
-            {
-                type        RosinRammler;
-
-                RosinRammlerDistribution
-                {
-                    minValue        1e-06;
-                    maxValue        0.000015;
-                    d               0.000015;
-                    n               3;
-                }
-            }
-        }
-
-        oxidizer          //Oxidizer Inlet Injection
-        {
-            type            coneInjection;
-            SOI             0;
-            massTotal       2.9167e-06;           //Total Mass (flowrate x duration)
-            parcelBasisType mass;
-            injectionMethod disc;
-            //flowType        flowRateAndDischarge;
-            flowType        constantVelocity;
-            Umag            8.4491;
-            dOuter          2.0e-05;           //Currently set to 1% of current injector diameter
-            dInner          0;
-            duration        1;
-            position        (15e-03 10001e-06 0); //(OffsetFromWall, InjectorCenterHeight)
-            direction       (0 1 0);
-            parcelsPerSecond 29167000;
-            flowRateProfile constant 1;
-
-            //Cd              constant 0.9;
-
-            thetaInner      constant 0.0;
-            thetaOuter      constant 5.0;
+            //thetaInner      constant 0.0;
+            //thetaOuter      constant 5.0;
 
             sizeDistribution
             {

@@ -53,6 +53,7 @@ boundaryField
         */
         type            kqRWallFunction;
         value           uniform 1;
+        //
     }
     outlet
     {
