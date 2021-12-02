@@ -38,12 +38,13 @@ boundaryField
     }
     fuelInlet
     {
-        /*
+        //
         type            fixedValue;
         value           uniform 1.7992;
-        */
+        /*
         type            kqRWallFunction;
         value           uniform 1;
+        */
     }
     oxidizerInlet
     {

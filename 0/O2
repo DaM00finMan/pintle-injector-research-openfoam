@@ -37,19 +37,20 @@ boundaryField
     }
     fuelInlet
     {
-        /*
+        //
         type            fixedValue;
-        value           uniform 0;
-        */
-        type            zeroGradient;
+        value           uniform 0.234;
+        //
+        //type            zeroGradient;
     }
     oxidizerInlet
     {
         /*
         type            fixedValue;
-        value           uniform 0.234;
+        value           uniform 1.0; // Set Lox Patch to 1.0
         */
         type            zeroGradient;
+        //
     }
     outlet
     {

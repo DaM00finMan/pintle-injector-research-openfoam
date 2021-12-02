@@ -85,6 +85,26 @@ boundaryField
         type            fixedValue;
         value           uniform $InternalNuT;
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform $InternalNuT;
+    }
 }
 
 

@@ -21,11 +21,16 @@ m4_define(ThroatDiameter, 49.8)
 m4_define(ExpansionRatio, 2.25)
 m4_define(LOXInjectorRadius, 2.0)
 m4_define(FuelInjectorRadius, 2.0)
+m4_define(AtmosphereLength, 500)
+m4_define(AtmosphereHeight, 200)
 
 //Measured:
 m4_define(XThroat, 532)
 m4_define(XExit, 581)
 m4_define(InjectorLength, 25)
+
+//Calculation for Atmosphere
+m4_define(XAtm, calc(XExit + AtmosphereLength))
 
 //Axisymmetrical Wedge Slice Half-Angle(mirrored over the x-z plane)
 m4_define(halfAngle, 0.5)
@@ -74,6 +79,10 @@ m4_define(zThroat, calc(ThroatRadius * sin(radAngle)))
 m4_define(yExit, calc(ExitRadius * cos(radAngle)))
 m4_define(zExit, calc(ExitRadius * sin(radAngle)))
 
+//Atm vertices
+m4_define(yAtm, calc(AtmosphereHeight * cos(radAngle)))
+m4_define(zAtm, calc(AtmosphereHeight * sin(radAngle)))
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 //Cell Count - Defined
 //n_z = 1 for all in order to create a "2D" grid
@@ -93,16 +102,22 @@ m4_define(n_x5, 10)
 m4_define(n_y5, 25)
 
 //Block 6
-m4_define(n_x6, 75)
+m4_define(n_x6, 200)
 
 //Block 8
-m4_define(n_x8, 15)
+m4_define(n_x8, 40)
 
 //Block 7
-m4_define(n_y7, 5)
+m4_define(n_y7, 10)
 
 //Block 9
-m4_define(n_x9, 15)
+m4_define(n_x9, 30)
+
+//Atm Block (10)
+m4_define(n_x10, 100)
+
+//Atm Top Block (11)
+m4_define(n_y11, 50)
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 //Cell Count - Coupled
@@ -133,6 +148,12 @@ m4_define(n_y9, n_y8)
 //Block 7
 m4_define(n_x7, calc(n_x6 + n_x8 + n_x9))
 
+//Atm Block (10)
+m4_define(n_y10, calc(n_y7 + n_y9))
+
+//Atm Top Block (11)
+m4_define(n_x11, n_x10)
+
 //Round Values to whole number
 //Need to figure out how to do this, for now will input rounding manually.
 
@@ -157,6 +178,13 @@ m4_define(b3Tob5CellRatio, calc(n_y3 / n_y5))
 
 m4_define(b4Tob5YRatio, calc((ChamberRadius - FuelInletTopRadius) / b5Height))
 m4_define(b4Tob5CellRatio, calc(n_y4 / n_y5))
+
+// Atmosphere Calculations - Blocks 7 and 9 ratios for Block 10 Grading
+m4_define(b7Tob10YRatio, calc(InjectorRadius / ExitRadius))
+m4_define(b7Tob10CellRatio, calc(n_y7 / n_y10))
+
+m4_define(b9Tob10YRatio, calc((ExitRadius - InjectorRadius) / ExitRadius))
+m4_define(b9Tob10CellRatio, calc(n_y9 / n_y10))
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 //Mutli-Grading Calculations
@@ -235,6 +263,10 @@ radialExit              zExit;
 FrwedgeExit             yExit;
 BkwedgeExit             -yExit;
 
+radialAtm               zAtm;
+FrwedgeAtm              yAtm;
+BkwedgeAtm              -yAtm;
+
 // X data for different block sections
 lengthLeftLoxInlet      XLoxInletLeft;
 lengthRightLoxInlet     XLoxInletRight;
@@ -242,6 +274,7 @@ lengthStartConverge     ChamberLength;
 lengthInjector          InjectorLength;
 lengthThroat            XThroat;
 lengthTotal             XExit;
+lengthAtm               XAtm;
 
 vertices
 (
@@ -335,6 +368,26 @@ name b9V5   ($lengthTotal 	        $radialExit 	        $FrwedgeExit)		        /
 name b9V6   ($lengthTotal 	        $radialExit 	        $BkwedgeExit)		        // Vertex #6
 name b9V7   ($lengthThroat 	        $radialThroat 	        $BkwedgeThroat)
 
+//Block 10 Vertices
+name b10V0   ($lengthTotal 	    0 	                    0)		                    // Vertex #0
+name b10V1   ($lengthAtm 	        0 	                    0)		           	        // Vertex #3
+
+
+name b10V4   ($lengthTotal 	    $radialExit 	    $FrwedgeExit)		    // Vertex #4
+name b10V5   ($lengthAtm 	        $radialExit 	    $FrwedgeExit)		    // Vertex #5
+name b10V6   ($lengthAtm 	        $radialExit 	    $BkwedgeExit)		    // Vertex #6
+name b10V7   ($lengthTotal 	    $radialExit 	    $BkwedgeExit)           // Vertex #7
+
+//Block 11 Vertices
+name b11V0   ($lengthTotal 	        $radialExit 	    $FrwedgeExit)		    // Vertex #0
+name b11V1   ($lengthAtm 	        $radialExit 	    $FrwedgeExit)		    // Vertex #1
+name b11V2   ($lengthAtm 	        $radialExit 	    $BkwedgeExit)		    // Vertex #2
+name b11V3   ($lengthTotal 	        $radialExit 	    $BkwedgeExit)		    // Vertex #3
+name b11V4   ($lengthTotal 	        $radialAtm 	        $FrwedgeAtm)		        // Vertex #4
+name b11V5   ($lengthAtm 	        $radialAtm 	        $FrwedgeAtm)		        // Vertex #5
+name b11V6   ($lengthAtm 	        $radialAtm 	        $BkwedgeAtm)		        // Vertex #6
+name b11V7   ($lengthTotal 	        $radialAtm 	        $BkwedgeAtm)
+
 );
 
 
@@ -398,6 +451,21 @@ hex (b8V0 b8V1 b8V2 b8V3 b8V4 b8V5 b8V6 b8V7)   (n_x8  1 n_y8)  simpleGrading (1
 //Block 9 - Diverging Section: Throat to Exit
 hex (b9V0 b9V1 b9V2 b9V3 b9V4 b9V5 b9V6 b9V7)   (n_x9  1 n_y9)  simpleGrading (1 1 1)
 
+//Block 10 - Atmospheric Portion Bottom
+hex (b10V0 b10V1 b10V1 b10V0 b10V4 b10V5 b10V6 b10V7)   (n_x10  1 n_y10)  
+    simpleGrading 
+  (
+    2 
+    1 
+    (
+      (b7Tob10YRatio b7Tob10CellRatio 1)
+      (b9Tob10YRatio b9Tob10CellRatio 1)
+    )
+  )
+
+//Block 11 - Atmospheric Portion Top
+hex (b11V0 b11V1 b11V2 b11V3 b11V4 b11V5 b11V6 b11V7)   (n_x11  1 n_y11)  simpleGrading (2 1 3)
+
 );
  
 boundary
@@ -416,6 +484,8 @@ boundary
 			   (b7V0 b7V1 b7V5 b7V4)		//Block 7
 			   (b8V0 b8V1 b8V5 b8V4)		//Block 8
 			   (b9V0 b9V1 b9V5 b9V4)		//Block 9
+         (b10V0 b10V1 b10V5 b10V4)		//Block 10
+         (b11V0 b11V1 b11V5 b11V4)		//Block 11
            );
       }
      back
@@ -432,6 +502,8 @@ boundary
 			   (b7V7 b7V6 b7V1 b7V0)		//Block 7
 			   (b8V7 b8V6 b8V2 b8V3)		//Block 8
 			   (b9V7 b9V6 b9V2 b9V3)		//Block 9
+         (b10V7 b10V6 b10V1 b10V0)		//Block 10
+         (b11V7 b11V6 b11V2 b11V3)		//Block 11
            );
       }
      walls
@@ -440,9 +512,9 @@ boundary
            faces  
            (
                (b1V2 b1V1 b1V0 b1V3)		//Block 1 - Injector Base X Plane
-			   (b1V4 b1V7 b1V3 b1V0)		//Block 1 - Injector Base Y Plane
-			   (b4V4 b4V7 b4V3 b4V0)	    //Block 4 - Chamber Wall
-			   (b4V4 b4V5 b4V6 b4V7)	    //Block 4 - Chamber Base
+			   //(b1V4 b1V7 b1V3 b1V0)		//Block 1 - Injector Base Y Plane
+			   //(b4V4 b4V7 b4V3 b4V0)	    //Block 4 - Chamber Base
+			   (b4V4 b4V5 b4V6 b4V7)	    //Block 4 - Chamber Wall
                (b5V4 b5V5 b5V6 b5V7)	    //Block 5 - Chamber Wall
 			   (b5V2 b5V1 b5V0 b5V3)	    //Block 5 - Injector Tip X Plane
                (b6V4 b6V5 b6V6 b6V7)	    //Block 6 - Main Chamber Top Wall
@@ -453,11 +525,14 @@ boundary
       }
      fuelInlet
      { 
-           //type patch;
-           type wall;
+           type patch;
+           //type wall;
            faces  
            (
                (b2V4 b2V7 b2V3 b2V0)		//Block 2 - Fuel Inlet
+               (b1V4 b1V7 b1V3 b1V0)		//Block 1 - Injector Base Y Plane
+               (b4V4 b4V7 b4V3 b4V0)	    //Block 4 - Chamber Base
+               
            );
       }
      oxidizerInlet
@@ -616,13 +691,48 @@ boundary
                (b9V4 b9V7 b9V3 b9V0)	    //Block 9 - Slave Merge Face
            );
       }
+      master7910
+     { 
+           type patch;
+           faces  
+           (
+                (b9V6 b9V5 b9V1 b9V2)	//Block 9 - Exit
+                (b7V6 b7V5 b7V1 b7V1)	//Block 7 - Exit
+           );
+      }
+      slave7910
+     { 
+           type patch;
+           faces  
+           (
+               (b10V4 b10V7 b10V0 b10V0)	    //Block 10 - Nozzle Exit
+           );
+      }
+      master1011
+     { 
+           type patch;
+           faces  
+           (
+                (b10V4 b10V5 b10V6 b10V7)	    //Block 10 - Top
+           );
+      }
+      slave1011
+     { 
+           type patch;
+           faces  
+           (
+               (b11V2 b11V1 b11V0 b11V3)	    //Block 11 - Master Merge Face
+           );
+      }
      outlet
      { 
            type patch;
            faces  
            (
-               (b9V6 b9V5 b9V1 b9V2)	//Block 9 - Exit
-               (b7V6 b7V5 b7V1 b7V1)	//Block 7 - Exit
+               (b10V6 b10V5 b10V1 b10V1)	//Block 10 - Right
+               (b11V6 b11V5 b11V1 b11V2)	//Block 11 - Right
+               (b11V4 b11V7 b11V3 b11V0)	    //Block 11 - Left
+               (b11V4 b11V5 b11V6 b11V7)	    //Block 11 - Top
            );
       }
 	 axis
@@ -631,6 +741,7 @@ boundary
            faces  
            (
 			   (b7V0 b7V1 b7V1 b7V0)		//Block 7
+         (b10V0 b10V1 b10V1 b10V0)		//Block 10
            );
 	}
 );
@@ -643,6 +754,8 @@ mergePatchPairs
     ( master89  slave89  )    //  merge patch 8 and 9
     ( master56  slave56  )    //  merge patch 5 and 6
     ( master68  slave68  )  //  merge patch 6 and 8
+    //( master7910  slave7910  )    //  merge patch 5 and 6
+    ( master1011  slave1011  )  //  merge patch 6 and 8
     //( slave345  master345  )      //  merge patch 3 and 5
     //( slave23 master23 )      //  merge patch 2 and 3
     //( master6897  slave6897  )  //  merge patch 6,8,9 and 7

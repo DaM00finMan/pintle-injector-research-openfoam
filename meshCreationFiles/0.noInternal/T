@@ -19,7 +19,7 @@ FoamFile
 dimensions      [0 0 0 1 0 0 0];
 
 
-internalField   uniform 2500;
+internalField   uniform 500;
 
 boundaryField
 {
@@ -37,11 +37,11 @@ boundaryField
     }
     fuelInlet
     {
-        /*
+        //
         type            fixedValue;
-        value           uniform 273;
-        */
-        type            zeroGradient;
+        value           uniform 500;
+        //
+        //type            zeroGradient;
     }
     oxidizerInlet
     {
@@ -53,10 +53,13 @@ boundaryField
     }
     outlet
     {
+        type            zeroGradient;
+        /*
         type            totalTemperature;
         gamma           1.192;
-        T0              uniform 2500;
-        value           uniform 2500;
+        T0              uniform 500;
+        value           uniform 500;
+        */
     }
     axis
     {

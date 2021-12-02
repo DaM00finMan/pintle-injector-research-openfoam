@@ -55,7 +55,7 @@ solution
 
 constantProperties
 {
-    T0              400;
+    T0              500;
 
     // place holders for rho0 and Cp0
     // - reset from liquid properties using T0
@@ -78,29 +78,29 @@ subModels
     {
         fuel    //Fuel Inlet Injection
         {
-            //type            coneInjection;
-            type            patchInjection;
-            patchName       fuelInlet;
-            U0              (206 0 0);
+            type            coneInjection;
+            //type            patchInjection;
+            //patchName       fuelInlet;
+            //U0              (206 0 0);
             SOI             0;
             massTotal       6.67e-04;           //Total Mass (flowrate x duration)
             parcelBasisType mass;
             injectionMethod disc;
-            //flowType        flowRateAndDischarge;
+            flowType        flowRateAndDischarge;
             //flowType        constantVelocity;
             //Umag            206;
-            //dInner          0;
-            //dOuter          2.0e-04;            //Currently set to 10% of current injector diameter
+            dInner          0;
+            dOuter          2.0e-04;            //Currently set to 10% of current injector diameter
             duration        1;
-            //position        (1.0e-06 15e-03 0); //(OffsetFromWall, InjectorCenterHeight)
+            position        (1.0e-06 15e-03 0); //(OffsetFromWall, InjectorCenterHeight)
             direction       (1 0 0);
             parcelsPerSecond 6e06;
             flowRateProfile constant 6.67e-04;
             
-            //Cd              constant 1.0;
+            Cd              constant 1.0;
 
-            //thetaInner      constant 0.0;
-            //thetaOuter      constant 5.0;
+            thetaInner      constant 0.0;
+            thetaOuter      constant 5.0;
 
             sizeDistribution
             {

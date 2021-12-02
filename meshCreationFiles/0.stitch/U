@@ -81,6 +81,26 @@ boundaryField
         type            fixedValue;
         value           uniform (0 0 0);
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
 }
 
 

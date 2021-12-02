@@ -17,7 +17,7 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 //fuelInletVelocity       21.9042;
 //oxidizerInletVelocity   8.4491;
-//fuelInletVelocity       100;
+fuelInletVelocity       206;
 oxidizerInletVelocity   206;
 
 dimensions      [0 1 -1 0 0 0 0];
@@ -41,11 +41,11 @@ boundaryField
     }
     fuelInlet
     {
-        /*
+        //
         type            fixedValue;
         value           uniform ($fuelInletVelocity 0 0);
-        */
-        type            noSlip;
+        //
+        //type            noSlip;
     }
     oxidizerInlet
     {

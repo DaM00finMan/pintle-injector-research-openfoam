@@ -17,8 +17,8 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 //fuelInletVelocity       21.9042;
 //oxidizerInletVelocity   8.4491;
-fuelInletVelocity       100;
-oxidizerInletVelocity   40;
+fuelInletVelocity       206;
+oxidizerInletVelocity   206;
 
 dimensions      [0 1 -1 0 0 0 0];
 
@@ -41,14 +41,20 @@ boundaryField
     }
     fuelInlet
     {
-        /*
+        //
         type            fixedValue;
         value           uniform ($fuelInletVelocity 0 0);
-        */
-        type            noSlip;
+        //
+        //type            noSlip;
     }
     oxidizerInlet
     {
+        /*
+        type            flowRateInletVelocity;
+        massFlowRate    9.72e-04;
+        rhoInlet        12.086; // O2 density at p=1MPa, T=300K
+        //rhoInlet        6.028; // O2 density at p=0.5MPa, T=320K
+        */
         /*
         type            fixedValue;
         value           uniform (0 $oxidizerInletVelocity 0);

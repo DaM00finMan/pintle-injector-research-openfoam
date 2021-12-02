@@ -82,6 +82,26 @@ boundaryField
         type            fixedValue;
         value           uniform $InternalO2;
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform $InternalO2;
+    }
 }
 
 

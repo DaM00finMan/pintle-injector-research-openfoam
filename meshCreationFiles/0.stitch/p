@@ -80,6 +80,26 @@ boundaryField
         type            fixedValue;
         value           uniform $InternalP;
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform $InternalP;
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform $InternalP;
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform $InternalP;
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform $InternalP;
+    }
 }
 
 

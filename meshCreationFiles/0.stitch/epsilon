@@ -85,6 +85,26 @@ boundaryField
         type            fixedValue;
         value           uniform $InternalEpsilon;
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform $InternalEpsilon;
+    }
 }
 
 

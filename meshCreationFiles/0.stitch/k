@@ -85,6 +85,26 @@ boundaryField
         type            fixedValue;
         value           uniform $InternalK;
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform $InternalK;
+    }
 }
 
 

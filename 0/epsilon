@@ -38,12 +38,13 @@ boundaryField
     }
     fuelInlet
     {
-        /*
+        //
         type            fixedValue;
         value           uniform 3620.1;
-        */
+        /*
         type            epsilonWallFunction;
         value           uniform 90;
+        */
     }
     oxidizerInlet
     {
@@ -53,6 +54,7 @@ boundaryField
         */
         type            epsilonWallFunction;
         value           uniform 90;
+        //
     }
     outlet
     {

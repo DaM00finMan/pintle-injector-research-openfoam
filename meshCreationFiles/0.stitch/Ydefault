@@ -82,6 +82,26 @@ boundaryField
         type            fixedValue;
         value           uniform $InternalY;
     }
+    master7910
+    {
+        type            fixedValue;
+        value           uniform $InternalY;
+    }
+    slave7910
+    {
+        type            fixedValue;
+        value           uniform $InternalY;
+    }
+    master1011
+    {
+        type            fixedValue;
+        value           uniform $InternalY;
+    }
+    slave1011
+    {
+        type            fixedValue;
+        value           uniform $InternalY;
+    }
 }
 
 
